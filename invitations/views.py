@@ -10,13 +10,14 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, View
 from django.views.generic.detail import SingleObjectMixin
+from django.forms.models import model_to_dict
 
 from .adapters import get_invitations_adapter
 from .app_settings import app_settings
 from .exceptions import AlreadyAccepted, AlreadyInvited, UserRegisteredEmail
 from .forms import CleanEmailMixin
 from .signals import invite_accepted
-from .utils import get_invitation_model, get_invite_form
+from .utils import get_invitation_model, get_invite_form, redirect_with_get_parameters
 
 Invitation = get_invitation_model()
 InviteForm = get_invite_form()
@@ -102,6 +103,9 @@ class AcceptInvite(SingleObjectMixin, View):
     def get_signup_redirect(self):
         return app_settings.SIGNUP_REDIRECT
 
+    def get_invite_expired_redirect(self):
+        return app_settings.INVITE_EXPIRED_REDIRECT
+
     def get(self, *args, **kwargs):
         if app_settings.CONFIRM_INVITE_ON_GET:
             return self.post(*args, **kwargs)
@@ -148,7 +152,7 @@ class AcceptInvite(SingleObjectMixin, View):
                 'invitations/messages/invite_expired.txt',
                 {'email': invitation.email})
             # Redirect to sign-up since they might be able to register anyway.
-            return redirect(self.get_signup_redirect())
+            return redirect(self.get_invite_expired_redirect())
 
         # The invitation is valid.
         # Mark it as accepted now if ACCEPT_INVITE_AFTER_SIGNUP is False.
@@ -160,7 +164,7 @@ class AcceptInvite(SingleObjectMixin, View):
         get_invitations_adapter().stash_verified_email(
             self.request, invitation.email)
 
-        return redirect(self.get_signup_redirect())
+        return redirect_with_get_parameters(self.get_signup_redirect(), **model_to_dict(invitation))
 
     def get_object(self, queryset=None):
         if queryset is None:

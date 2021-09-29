@@ -98,5 +98,18 @@ class AppSettings(object):
             "invitations.forms.InvitationAdminChangeForm"
         )
 
+    @property
+    def USE_MESSAGES_FRAMEWORK(self):
+        return self._setting(
+            "USE_MESSAGES_FRAMEWORK",
+            False
+        )
+
+    @property
+    def INVITE_EXPIRED_REDIRECT(self):
+        return self._setting(
+            "INVITE_EXPIRED_REDIRECT",
+            "invite-expired"
+        )
 
 app_settings = AppSettings('INVITATIONS_')

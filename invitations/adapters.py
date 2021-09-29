@@ -95,17 +95,18 @@ class BaseInvitationsAdapter(object):
         Wrapper of `django.contrib.messages.add_message`, that reads
         the message text from a template.
         """
-        if 'django.contrib.messages' in settings.INSTALLED_APPS:
-            try:
-                if message_context is None:
-                    message_context = {}
-                message = render_to_string(message_template,
-                                           message_context).strip()
-                if message:
-                    messages.add_message(request, level, message,
-                                         extra_tags=extra_tags)
-            except TemplateDoesNotExist:
-                pass
+        if app_settings.USE_MESSAGES_FRAMEWORK:
+            if 'django.contrib.messages' in settings.INSTALLED_APPS:
+                try:
+                    if message_context is None:
+                        message_context = {}
+                    message = render_to_string(message_template,
+                                            message_context).strip()
+                    if message:
+                        messages.add_message(request, level, message,
+                                            extra_tags=extra_tags)
+                except TemplateDoesNotExist:
+                    pass
 
 
 def get_invitations_adapter():

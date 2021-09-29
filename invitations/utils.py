@@ -1,5 +1,7 @@
 from django.apps import apps as django_apps
 from django.core.exceptions import ImproperlyConfigured
+from django.http.response import HttpResponseRedirect
+from django.urls import reverse
 
 from .app_settings import app_settings
 
@@ -44,3 +46,9 @@ def get_invitation_model():
             "path refers to model '%s' that\
              has not been installed" % app_settings.INVITATION_MODEL
         )
+
+def redirect_with_get_parameters(url_name, *args, **kwargs): 
+    import urllib
+    url = reverse(url_name, args = args)
+    params = urllib.parse.urlencode(kwargs)
+    return HttpResponseRedirect(url + "?%s" % params)

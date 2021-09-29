@@ -23,6 +23,8 @@ class Invitation(AbstractBaseInvitation):
     created = models.DateTimeField(verbose_name=_('created'),
                                    default=timezone.now)
 
+    company = models.ForeignKey(settings.INVITATIONS_COMPANY_MODEL, on_delete=models.CASCADE, null=True)
+
     @classmethod
     def create(cls, email, inviter=None, **kwargs):
         key = get_random_string(64).lower()
