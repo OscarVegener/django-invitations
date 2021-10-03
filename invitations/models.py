@@ -18,12 +18,12 @@ from .base_invitation import AbstractBaseInvitation
 
 
 class Invitation(AbstractBaseInvitation):
-    email = models.EmailField(unique=True, verbose_name=_('e-mail address'),
+    email = models.EmailField(verbose_name=_('e-mail address'),
                               max_length=app_settings.EMAIL_MAX_LENGTH)
     created = models.DateTimeField(verbose_name=_('created'),
                                    default=timezone.now)
 
-    company = models.ForeignKey(settings.INVITATIONS_COMPANY_MODEL, on_delete=models.CASCADE, null=True)
+    company = models.ForeignKey(settings.INVITATIONS_COMPANY_MODEL, on_delete=models.CASCADE, unique=True)
 
     @classmethod
     def create(cls, email, inviter=None, **kwargs):
