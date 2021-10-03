@@ -53,7 +53,6 @@ class Invitation(AbstractBaseInvitation):
             'email': self.email,
             'key': self.key,
             'inviter': self.inviter,
-            **(kwargs.get('context'))
         })
 
         email_template = 'invitations/email/email_invite'
