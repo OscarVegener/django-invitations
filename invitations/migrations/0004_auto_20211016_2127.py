@@ -20,4 +20,13 @@ class Migration(migrations.Migration):
             name='id',
             field=models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
         ),
+        migrations.AlterField(
+            model_name='invitation',
+            name='email',
+            field=models.EmailField(max_length=254, verbose_name='e-mail address'),
+        ),
+        migrations.AlterUniqueTogether(
+            name='invitation',
+            unique_together={('email', 'company')},
+        ),
     ]
