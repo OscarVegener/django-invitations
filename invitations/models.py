@@ -20,14 +20,14 @@ from .base_invitation import AbstractBaseInvitation
 class Invitation(AbstractBaseInvitation):
     email = models.EmailField(verbose_name=_('e-mail address'),
                               max_length=app_settings.EMAIL_MAX_LENGTH,
-                              unique=False)
+                              unique=True)
     created = models.DateTimeField(verbose_name=_('created'),
                                    default=timezone.now)
 
     company = models.ForeignKey(settings.INVITATIONS_COMPANY_MODEL, on_delete=models.CASCADE, null=True)
 
-    class Meta:
-        unique_together = ('email', 'company')
+    # class Meta:
+    #     unique_together = ('email', 'company')
 
     @classmethod
     def create(cls, email, inviter=None, **kwargs):
