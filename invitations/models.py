@@ -20,7 +20,7 @@ from .base_invitation import AbstractBaseInvitation
 class Invitation(AbstractBaseInvitation):
     email = models.EmailField(verbose_name=_('e-mail address'),
                               max_length=app_settings.EMAIL_MAX_LENGTH,
-                              unique=True)
+                              unique=False)
     created = models.DateTimeField(verbose_name=_('created'),
                                    default=timezone.now)
 
