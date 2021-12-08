@@ -31,7 +31,7 @@ class Invitation(AbstractBaseInvitation):
 
     @classmethod
     def create(cls, email, inviter=None, **kwargs):
-        key = get_random_string(64)
+        key = get_random_string(64).lower()
         while(Invitation.objects.filter(key=key).exists()):
             key = get_random_string(64)
         instance = cls._default_manager.create(
